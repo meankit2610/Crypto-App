@@ -1,8 +1,9 @@
 import React from 'react'
-import { Container, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
+import { Heading, Text, VStack } from "@chakra-ui/layout";
 import { Image } from '@chakra-ui/react';
-const CoinCard = ({ name, img, rank, url }) => (
-  <a href={url} target={"blank"}>
+import { Link } from 'react-router-dom';
+const CoinCard = ({ id, name, img, symbol, price, currencySymbol = "₹" }) => (
+  <Link to={`/coin/${id}`}>
     <VStack
       w={"52"}
       shadow={"lg"}
@@ -16,19 +17,14 @@ const CoinCard = ({ name, img, rank, url }) => (
         },
       }}
     >
-      <Image
-        src={img}
-        w={"10"}
-        h={"10"}
-        objectFit={"contain"}
-        alt={"Exchanhe"}
-      />
+      <Image src={img} w={"10"} h={"10"} objectFit={"contain"} alt={"Coins"} />
       <Heading size={"md"} noOfLines={1}>
-        {rank}
+        {symbol}
       </Heading>
       <Text noOfLines={1}>{name}</Text>
+      <Text>{price ? `${currencySymbol}${price}` : "NA"}</Text>
     </VStack>
-  </a>
+  </Link>
 );
 
 export default CoinCard
