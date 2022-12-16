@@ -8,6 +8,8 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { server } from '../index'
 import Loader from "./Loader"
+import ErrorComponent from "./ErrorComponent";
+import Chart from './Chart'
 
 const CoinDetails = () => {
   const params = useParams()
@@ -15,6 +17,8 @@ const CoinDetails = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [currency, setCurrency] = useState("inr")
+  const [days, setDays] = useState('24h')
+  const [chartArray, setChartArray] = useState([]);
 
    const currencySymbol =
     currency === "inr" ? "₹" : currency === "eur" ? "€" : "$";
@@ -25,8 +29,14 @@ const CoinDetails = () => {
         const { data } = await axios.get(
           `${server}/coins/${params.id}`
         );
+
+        const { data: chartData } = await axios.get(
+          `${server}/coins/${params.id}/market_chart?vs_currency=${currency}&days=${days}`
+        );
         setCoin(data);
-        console.log(coin);
+        setChartArray(chartData.prices)
+
+        console.log(chartData.prices);
         setLoading(false);
       } catch (error) {
         console.log("error...");
@@ -37,12 +47,16 @@ const CoinDetails = () => {
     fetchCoin();
   }, [params.id,currency]);
   
+   if (error) return <ErrorComponent message={"Error While Fetching Coin"} />;
   return (
-    <Container>
+    <Container maxW={'container.xl'}>
       {loading ? (
         <Loader />
       ) : (
-        <>
+          <>
+            <Box>
+              <Chart arr={chartArray} currency={currencySymbol} days={days} />
+            </Box>
           {/* {Button} */}
 
           <RadioGroup value={currency} onChange={setCurrency} p={"8"}>
@@ -119,8 +133,8 @@ const CoinDetails = () => {
 }
 
 const Item = ({ title, value }) => (
-  <HStack>
-    <Text>
+  <HStack justifyContent={"space-between"} w={"full"} my={'4'}>
+    <Text fontFamily={"Bebas Neue"} letterSpacing={'widest'}>
       {title}
     </Text>
     <Text>{value}</Text>
