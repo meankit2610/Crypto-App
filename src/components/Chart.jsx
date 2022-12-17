@@ -1,6 +1,8 @@
 import React from 'react'
 import {Line} from "react-chartjs-2"
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, 
+import {
+  Chart as ChartJS, CategoryScale,
+  LinearScale, PointElement, LineElement, 
 Title,Tooltip,Legend
 } from "chart.js"
 
@@ -19,8 +21,8 @@ const Chart = ({ arr = [], currency, days }) => {
     const date = []
     
     for (let i = 0; i < arr.length; i++){
-        if (days === "24h") date.push(new Date(arr[i][0]).toLocaleDateString());
-        else date.push(new Date(arr[i][0]).toLocaleTimeString())
+        if (days === "24h") date.push(new Date(arr[i][0]).toLocaleTimeString());
+        else date.push(new Date(arr[i][0]).toLocaleDateString())
         prices.push(arr[i][1])
     }
 

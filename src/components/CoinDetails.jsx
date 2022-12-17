@@ -1,5 +1,5 @@
 import {
-  Badge, Box, Container, HStack, Image, Progress,
+  Badge, Box, Button, Container, HStack, Image, Progress,
   Radio, RadioGroup, Stat, StatArrow, StatHelpText,
   StatLabel, StatNumber, Text, VStack
 } from '@chakra-ui/react'
@@ -23,6 +23,49 @@ const CoinDetails = () => {
    const currencySymbol =
     currency === "inr" ? "₹" : currency === "eur" ? "€" : "$";
   
+  const btns = ['24h', '7d', '14d', '30d', '60d', '200d', '1y', 'max']
+  
+  const switchChartStats = (key) => {
+    switch (key) {
+      case '24h':
+        setDays('24h')
+        setLoading(true)
+        break;
+      case '7d':
+        setDays('7d')
+        setLoading(true)
+        break;
+      case '14d':
+        setDays('14d')
+        setLoading(true)
+        break;
+      case '30d':
+        setDays('30d')
+        setLoading(true)
+        break;
+      case '60d':
+        setDays('60d')
+        setLoading(true)
+        break;
+      case '200d':
+        setDays('200d')
+        setLoading(true)
+        break;
+      case '1y':
+        setDays('365d')
+        setLoading(true)
+        break;
+      case 'max':
+        setDays('max')
+        setLoading(true)
+        break;
+    
+      default:
+        setDays("24h")
+        setLoading(true)
+        break;
+    }
+  }
   useEffect(() => {
     const fetchCoin = async () => {
       try {
@@ -45,7 +88,7 @@ const CoinDetails = () => {
       }
     };
     fetchCoin();
-  }, [params.id,currency]);
+  }, [params.id,currency, days]);
   
    if (error) return <ErrorComponent message={"Error While Fetching Coin"} />;
   return (
@@ -57,7 +100,12 @@ const CoinDetails = () => {
             <Box>
               <Chart arr={chartArray} currency={currencySymbol} days={days} />
             </Box>
-          {/* {Button} */}
+          
+            <HStack>
+              {btns.map((i) => (
+                <Button key={i} onClick={()=> switchChartStats(i)} >{i}</Button>
+              ))}
+            </HStack>
 
           <RadioGroup value={currency} onChange={setCurrency} p={"8"}>
             <HStack spacing={"4"}>
